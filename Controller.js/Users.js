@@ -12,16 +12,16 @@ const userDetails = async (req,res)=>{
 }
 
 const singleDetail = async (req,res)=>{
-    const details = await users.findById(req.params.id)
-    if(error){
-        res.send({error:error.message})
+    try{
+        const details = await Users.findById(req.params.id)
+        res.json(details)
     }
-    else{
-        res.send(details)
+    catch(error){
+        res.send({message:error.message})
     }
 }
 
-// const addUser = async (req,res)=>{
+// const addUser = async (req,res)=>{s
 //  try{
 //     const {id,firstname,lastname,email,gender,profile,mobile,status,location} = req.body;
 //     const data = new Users({id,firstname,lastname,email,gender,profile,mobile,status,location});
@@ -40,8 +40,8 @@ const addUser = async (req,res)=>{
         
        const user = new Users({
         id:req.body.id,
-        firstname:req.body.firstname,
-        lastname:req.body.lastname,
+        first_name:req.body.first_name,
+        last_name:req.body.last_name,
         email:req.body.email,
         gender:req.body.gender,
         profile:req.body.profile,
@@ -69,9 +69,10 @@ const addUser = async (req,res)=>{
 
 const updateUser = async (req,res)=>{
     try{
-       const {id,firstname,lastname,email,gender,profile,mobile,status,location} = req.body;
-       const updateuser = new users ({id,firstname,lastname,email,gender,profile,mobile,status,location});
-       const update = await data.findByIdAndUpdate({_id:req.params.id},updateuser);
+       const {id,first_name,last_name,email,gender,profile,mobile,status,location} = req.body;
+    //    const updateuser = new Users ({id,firstname,lastname,email,gender,profile,mobile,status,location});
+       const update = await Users.findOneAndUpdate({id:req.params.id},
+        {id,first_name,last_name,email,gender,profile,mobile,status,location});
        res.send(update)
     }catch(error){
        res.send({error:error.message})
@@ -81,13 +82,13 @@ const updateUser = async (req,res)=>{
 
    
 const deleteUser = async (req,res)=>{
-    const details = await users.findByIdAndDelete(req.params.id)
-    if(error){
-        res.send({error:error.message})
-    }
-    else{
-        res.send(details)
-    }
+    const details = await Users.findOneAndDelete({id:req.params.id})
+   try{
+    res.send(details)
+   }
+   catch(error){
+    res.send(error)
+   }
 }
 
 module.exports = {userDetails,singleDetail,addUser,updateUser,deleteUser}

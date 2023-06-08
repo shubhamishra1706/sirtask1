@@ -1,4 +1,7 @@
 const express = require('express')
+const cors = require('cors')
+
+
 const {userRoute} = require('./routes/Users')
 const app = express()
 const mongoose = require('mongoose')
@@ -7,6 +10,9 @@ const  dotenv  = require('dotenv')
 app.use(express.json())
 app.use(bodyparser.urlencoded({extended:false}))
 dotenv.config()
+app.use(cors())
+
+
 mongoose.connect(process.env.DB_CONNECT,{useNewUrlParser:true,useUnifiedTopology:true}).then(()=>{
     console.log("connected with mongodb")
 }).catch((err)=>{
